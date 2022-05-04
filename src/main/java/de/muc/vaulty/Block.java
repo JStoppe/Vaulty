@@ -1,6 +1,7 @@
 package de.muc.vaulty;
 
 import java.util.ArrayList;
+// hier könnte noch ein Import stehen
 import java.util.Date;
 
 public class Block {
