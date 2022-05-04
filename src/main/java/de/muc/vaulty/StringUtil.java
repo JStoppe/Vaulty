@@ -93,4 +93,15 @@ public class StringUtil {
 		String merkleRoot = (treeLayer.size() == 1) ? treeLayer.get(0) : "";
 		return merkleRoot;
 	}
+	
+	public static void printBlockchainToTerminal(ArrayList<Block> blockchain) {
+		System.out.println("\n##############################################################\nThe Vaulty Block Chain:\n##############################################################\\n");
+		for(Block b : blockchain) {
+			System.out.println("\n\n\n##############################################################\nBlock_ID: " + b.hash);
+			for(int i = 0; i < b.transactions.size(); i++) {
+				System.out.println(b.transactions.get(i));
+			}
+			System.out.println("##############################################################");
+		}
+	}
 }

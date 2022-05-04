@@ -97,4 +97,13 @@ public class Transaction {
 				Float.toString(value) + sequence
 				);
 	}
+	
+	public String toString() {
+		return "\nTransaction ID: " + this.transactionId + " \nfrom: " + StringUtil.getStringFromKey(this.sender) + " \nto: " 
+	+ StringUtil.getStringFromKey(this.reciepient) + "\nvalue:" + this.value + "\n" 
+				+ VaultyChain.wallets.get(StringUtil.getStringFromKey(this.sender)).username +" (current balance: " + VaultyChain.wallets.get(StringUtil.getStringFromKey(this.sender)).getBalance() 
+				+ ") sends " + VaultyChain.wallets.get(StringUtil.getStringFromKey(this.reciepient)).username + " (current balance: " + VaultyChain.wallets.get(StringUtil.getStringFromKey(this.reciepient)).getBalance() 
+				+ ")   " + this.value
+				+ " Vaulty coins.";
+	}
 }

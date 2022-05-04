@@ -7,12 +7,16 @@ import java.util.Map;
 
 public class Wallet {
 	
+	
+	public String username;
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
 	
 	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
 	
-	public Wallet() {
+	public Wallet(String username) {
+		
+		this.username = username;
 		generateKeyPair();
 	}
 		
@@ -27,6 +31,7 @@ public class Wallet {
 	        // Set the public and private keys from the keyPair
 	        privateKey = keyPair.getPrivate();
 	        publicKey = keyPair.getPublic();
+	        VaultyChain.wallets.put(StringUtil.getStringFromKey(this.publicKey),this);
 	        
 		}catch(Exception e) {
 			throw new RuntimeException(e);
