@@ -42,7 +42,7 @@ public class VaultyChain {
 		Block block1 = new Block(genesis.hash);
 		System.out.println("\nWalletA's balance is: " + walletA.getBalance());
 		System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
-		block1.addTransaction(walletA.sendFunds(walletB.publicKey, 0.01f));
+		block1.addTransaction(walletA.sendFunds(walletB.publicKey, 10f));
 		System.out.println("\nWalletA's balance is: " + walletA.getBalance());
 		System.out.println("WalletB's balance is: " + walletB.getBalance());
 //		block1.addTransaction(walletB.sendFunds(walletA.publicKey, 20f));

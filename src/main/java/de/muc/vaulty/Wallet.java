@@ -57,7 +57,7 @@ public class Wallet {
 			TransactionOutput UTXO = item.getValue();
 			total += UTXO.value;
 			inputs.add(new TransactionInput(UTXO.id));
-			if(total >= value) break;
+			if(total > value) break;
 		}
 		
 		Transaction newTransaction = new Transaction(publicKey, _recipient , value, inputs);
