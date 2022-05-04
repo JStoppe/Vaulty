@@ -6,6 +6,8 @@ import java.util.HashMap;
 //import com.google.gson.GsonBuilder;
 import java.util.Map;
 
+import de.muc.vaulty.view.MainFrame;
+
 public class VaultyChain {
 	
 	public static ArrayList<Block> blockchain = new ArrayList<Block>();
@@ -19,6 +21,9 @@ public class VaultyChain {
 
 	public static void main(String[] args) {	
 		//add our blocks to the blockchain ArrayList:
+		
+		new MainFrame();
+		
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); //Setup Bouncey castle as a Security Provider
 		
 		//Create wallets:
