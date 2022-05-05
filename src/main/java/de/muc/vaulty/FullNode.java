@@ -15,20 +15,24 @@ public class FullNode extends Node implements Serializable{
 	
 	public ArrayList<Block> recievedBlocks = new ArrayList<Block>();
 	
+	
+	
 	private void processRB() {
 		
 	}
 	
 	private void updateUTXOs() {
-		
+		// delete used Outputs
+		// create new unspent Outputs
 	}
 	
 	private void updateMemPool() {
-		
+		// Blocks successfully mined
+		// delete Transactions included in this Block
 	}
 	
 	private void checkChain() {
-		
+		// isChainValid Methode from VaultyChain
 	}
 	
 	private void checkBlock() {

@@ -1,7 +1,6 @@
 package de.muc.vaulty;
 
 import java.util.ArrayList;
-// hier könnte noch ein Import stehen
 import java.util.Date;
 
 public class Block {
@@ -12,7 +11,7 @@ public class Block {
 	public ArrayList<Transaction> transactions = new ArrayList<Transaction>(); //our data will be a simple message.
 	public long timeStamp; //as number of milliseconds since 1/1/1970.
 	public int nonce;
-	
+		
 	//Block Constructor.  
 	public Block(String previousHash ) {
 		this.previousHash = previousHash;
