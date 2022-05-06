@@ -12,8 +12,7 @@ import de.muc.vaulty.view.MainFrame;
 
 public class VaultyChain {
 	
-	public static ArrayList<Block> blockchain = new ArrayList<Block>();
-	public static HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
+	public static ArrayList<Node> Network = new ArrayList<Node>();
 	
 	public static int difficulty = 3;
 	public static float minimumTransaction = 0.1f;
@@ -74,7 +73,6 @@ public class VaultyChain {
 		System.out.println("WalletB's balance is: " + walletB.getBalance());
 		
 		isChainValid();
-		StringUtil.printBlockchainToTerminal(blockchain);
 		
 	}
 	

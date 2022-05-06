@@ -4,6 +4,7 @@ import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Wallet {
 	
@@ -40,7 +41,7 @@ public class Wallet {
 	
 	public float getBalance() {
 		float total = 0;	
-        for (Map.Entry<String, TransactionOutput> item: VaultyChain.UTXOs.entrySet()){
+        for (Map.Entry<String, TransactionOutput> item: getFullNode().UTXOset.entrySet()){
         	TransactionOutput UTXO = item.getValue();
             if(UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
             	UTXOs.put(UTXO.id,UTXO); //add it to our list of unspent transactions.
@@ -73,6 +74,16 @@ public class Wallet {
 		}
 		
 		return newTransaction;
+	}
+	
+	private FullNode getFullNode() {
+		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
+		for(Node n : VaultyChain.Network) {
+			if(n.NodeClass == "FullNode")
+				FullNodes.add((FullNode)n);
+		}
+		Random random = new Random();
+		return FullNodes.get(random.nextInt(FullNodes.size()));
 	}
 	
 }

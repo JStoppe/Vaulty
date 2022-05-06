@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FullNode extends Node implements Serializable{
-	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
+	public HashMap<String,TransactionOutput> UTXOset = new HashMap<String,TransactionOutput>();
 	public ArrayList<Transaction> memPool = new ArrayList<Transaction>();
 	
 	public FullNode(String id) {
