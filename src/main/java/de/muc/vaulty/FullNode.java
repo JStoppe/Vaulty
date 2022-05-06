@@ -3,6 +3,7 @@ package de.muc.vaulty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+//new comment for merge
 
 public class FullNode extends Node implements Serializable{
 	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
