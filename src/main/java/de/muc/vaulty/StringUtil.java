@@ -104,4 +104,14 @@ public class StringUtil {
 			System.out.println("##############################################################");
 		}
 	}
+	
+	public String calculateHash(Block block) {
+		String calculatedhash = StringUtil.applySha256( 
+				block.previousHash +
+				Long.toString(block.timeStamp) +
+				Integer.toString(block.nonce) + 
+				block.merkleRoot
+				);
+		return calculatedhash;
+	}
 }

@@ -21,15 +21,6 @@ public class Block {
 	}
 	
 	//Calculate new hash based on blocks contents
-	public String calculateHash() {
-		String calculatedhash = StringUtil.applySha256( 
-				previousHash +
-				Long.toString(timeStamp) +
-				Integer.toString(nonce) + 
-				merkleRoot
-				);
-		return calculatedhash;
-	}
 	
 	//Increases nonce value until hash target is reached.
 	public void mineBlock(int difficulty) {
