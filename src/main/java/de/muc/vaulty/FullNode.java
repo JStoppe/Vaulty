@@ -49,7 +49,7 @@ public class FullNode extends Node implements Serializable{
 		if(block.merkleRoot != StringUtil.getMerkleRoot(block.transactions))
 			return false;
 		String target = StringUtil.getDificultyString(VaultyChain.difficulty); //Create a string with difficulty * "0" 
-		if(block.hash.substring( 0, VaultyChain.difficulty).equals(target)) {
+		if(StringUtil.calculateHash(block).substring( 0, VaultyChain.difficulty).equals(target)) {
 			return true;
 		}
 		else {

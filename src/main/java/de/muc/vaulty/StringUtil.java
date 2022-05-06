@@ -105,7 +105,7 @@ public class StringUtil {
 		}
 	}
 	
-	public String calculateHash(Block block) {
+	public static String calculateHash(Block block) {
 		String calculatedhash = StringUtil.applySha256( 
 				block.previousHash +
 				Long.toString(block.timeStamp) +
