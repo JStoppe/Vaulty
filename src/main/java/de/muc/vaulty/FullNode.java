@@ -17,7 +17,7 @@ public class FullNode extends Node implements Serializable{
 	}
 	
 	public ArrayList<Block> recievedBlocks = new ArrayList<Block>();
-	
+	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 	
 	
 	private void processRB() {
