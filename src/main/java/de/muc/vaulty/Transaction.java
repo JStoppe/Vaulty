@@ -33,11 +33,15 @@ public class Transaction {
 		float leftOver = getInputsValue() - value; //get value of inputs then the left over change:
 		transactionId = calulateHash();
 		outputs.add(new TransactionOutput( this.reciepient, value,transactionId)); //send value to recipient
-		outputs.add(new TransactionOutput( this.sender, leftOver,transactionId)); //send the left over 'change' back to sender		
+		if(leftOver > 0)
+			outputs.add(new TransactionOutput( this.sender, leftOver,transactionId)); //send the left over 'change' back to sender		
 	}
 	
 	public float getInputsValue() {
 		float total = 0;
+		if(inputs == null) {
+			return 0;
+		}
 		for(TransactionOutput i : inputs) {
 			total += i.value;
 		}

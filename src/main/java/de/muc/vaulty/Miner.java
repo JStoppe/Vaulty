@@ -9,7 +9,8 @@ public class Miner extends Node{
 	Block mineableBlock;
 	Block minedBlock;
 	FullNode fullNode;
-	Wallet minerWallet;
+	int i=1;
+	Wallet minerWallet = new Wallet("Miner " + i++);	
 	boolean newBlockValidatedByNote = false;
 	
 	
@@ -22,9 +23,14 @@ public class Miner extends Node{
 	
 		
 	public void buildBlock() {
-		this.fullNode= StringUtil.getFullNode();	
+		this.fullNode= StringUtil.getFullNode();
+		if(this.fullNode.blockchain.isEmpty()) {
+			this.mineableBlock = new Block("0");
+		}
+		else {
 		this.mineableBlock = new Block(this.fullNode.getLastHash());
-		useableTransactions.add(new Transaction(VaultyChain.coinbase.publicKey, this.minerWallet.publicKey, 0, 0, null, VaultyChain.coinbase));
+		}
+		mineableBlock.transactions.add(new Transaction(VaultyChain.coinbase.publicKey, this.minerWallet.publicKey, 0, 0, null, VaultyChain.coinbase));
 		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 200000 < new Date().getTime()) {
 			int i = 0;
 			if(fullNode.memPool.get(i) == null ){
@@ -36,7 +42,9 @@ public class Miner extends Node{
 			}
 			
 		}
-		this.mineableBlock.transactions.get(0).value = this.calcMinerReward(); 
+		if(this.mineableBlock.transactions.size()>0) {
+		this.mineableBlock.transactions.get(0).value = this.calcMinerReward();
+		}
 		this.mineableBlock.transactions = useableTransactions;
 	}
 	
