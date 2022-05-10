@@ -20,7 +20,10 @@ public class FullNode extends Node implements Serializable {
 	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 
 	private void processResievedBlocks() {
-
+		Block rb = recievedBlocks.get(1);
+		if(isBlockValid(rb)) {
+			
+		}
 	}
 
 	private void processRecievedTransactions() {
@@ -162,14 +165,13 @@ public class FullNode extends Node implements Serializable {
 
 	}
 
-	private FullNode getOtherFullNode() {
+	private ArrayList<FullNode> getOtherFullNodes() {
 		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
 		for (Node n : VaultyChain.Network) {
 			if (n.NodeClass == "FullNode" && n.nodeID != this.nodeID)
 				FullNodes.add((FullNode) n);
 		}
-		Random random = new Random();
-		return FullNodes.get(random.nextInt(FullNodes.size()));
+		return FullNodes;
 	}
 	
 	public String getLastHash() {
