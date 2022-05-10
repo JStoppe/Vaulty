@@ -18,35 +18,5 @@ public class Block {
 		this.timeStamp = new Date().getTime();
 		
 		this.hash = StringUtil.calculateHash(this); //Making sure we do this after we set the other values.
-	}
-	
-	//Calculate new hash based on blocks contents
-	
-	//Increases nonce value until hash target is reached.
-	public void mineBlock(int difficulty) {
-		merkleRoot = StringUtil.getMerkleRoot(transactions);
-		String target = StringUtil.getDificultyString(difficulty); //Create a string with difficulty * "0" 
-		while(!hash.substring( 0, difficulty).equals(target)) {
-			nonce ++;
-			hash = StringUtil.calculateHash(this);
-		}
-		System.out.println("Block Mined!!! : " + hash);
-	}
-	
-	//Add transactions to this block
-	public boolean addTransaction(Transaction transaction) {
-		//process transaction and check if valid, unless block is genesis block then ignore.
-		if(transaction == null) return false;		
-		if((!"0".equals(previousHash))) {
-			if((StringUtil.validateTransaction(transaction,StringUtil.getFullNode()) != true)) {
-				System.out.println("Transaction failed to process. Discarded.");
-				return false;
-			}
-		}
-
-		transactions.add(transaction);
-		System.out.println("Transaction Successfully added to Block");
-		return true;
-	}
-	
+	}	
 }

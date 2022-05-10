@@ -91,5 +91,11 @@ public class FullNode extends Node implements Serializable{
 		Random random = new Random();
 		return FullNodes.get(random.nextInt(FullNodes.size()));
 	}
+	
+	public String getLastHash() {
+		return this.blockchain.get(this.blockchain.size()-1).hash;
+	}
 }
+
+
 

@@ -154,7 +154,9 @@ public class StringUtil {
 	}
 	
 	public static boolean verifySignature(Transaction t) {
+
 		String data = StringUtil.getStringFromKey(t.sender) + StringUtil.getStringFromKey(t.reciepient) + Float.toString(t.value) + Float.toString(t.minerFee);
 		return StringUtil.verifyECDSASig(t.sender, data, t.signature);
 	}
+	
 }
