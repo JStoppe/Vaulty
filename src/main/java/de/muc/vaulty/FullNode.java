@@ -20,7 +20,7 @@ public class FullNode extends Node implements Serializable{
 	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 	
 	
-	private void processResievedBlocks() {
+	private void processReceivedBlocks() {
 		
 	}
 	
@@ -41,12 +41,27 @@ public class FullNode extends Node implements Serializable{
 		}
 	}
 	private void updateUTXOs() {
-		// delete used Outputs
-		// create new unspent Outputs
+		for(Transaction transaction : this.blockchain.get(this.blockchain.size()-1).transactions) {
+			for (TransactionOutput tout : transaction.inputs) {
+				UTXOset.remove(tout.id);
+			}
+			for (TransactionOutput tout : transaction.outputs) {
+				UTXOset.put(tout.id,tout);
+			}
+	
+		}
 	}
 	
 	private void updateMemPool() {
 		// Blocks successfully mined
+		for(Transaction transaction : this.blockchain.get(this.blockchain.size()-1).transactions) {
+			for (int i=0;i<this.memPool.size();i++) {
+				if (transaction.transactionId == memPool.get(i).transactionId) {
+					memPool.remove(i);
+				}
+			}
+		}
+		
 		// delete Transactions included in this Block
 	}
 	
