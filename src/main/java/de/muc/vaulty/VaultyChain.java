@@ -21,6 +21,8 @@ public class VaultyChain {
 	public static Transaction genesisTransaction;
 	public static HashMap<String, Wallet> wallets = new HashMap<String,Wallet>();
 	public static float blockMinedReward = 20.0f;
+	public static Wallet coinbase;
+	
 
 	public static void main(String[] args) {	
 		//add our blocks to the blockchain ArrayList:

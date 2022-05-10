@@ -7,7 +7,9 @@ public class Miner extends Node{
 	
 	ArrayList<Transaction> useableTransactions = new ArrayList<Transaction>();
 	Block mineableBlock;
+	Block minedBlock;
 	FullNode fullNode;
+	Wallet minerWallet;
 	
 	
 	public Miner(String nodeID, Wallet walletID) {
@@ -19,6 +21,7 @@ public class Miner extends Node{
 	public void buildBlock() {
 		this.fullNode= StringUtil.getFullNode();	
 		this.mineableBlock = new Block(this.fullNode.getLastHash());
+		useableTransactions.add(new Transaction(VaultyChain.coinbase.publicKey, this.minerWallet.publicKey, 0, 0, null, VaultyChain.coinbase));
 		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 200000 < new Date().getTime()) {
 			int i = 0;
 			if(fullNode.memPool.get(i) == null ){
@@ -30,26 +33,24 @@ public class Miner extends Node{
 			}
 			
 		}
+		this.mineableBlock.transactions.get(0).value = this.calcMinerReward(); 
 		this.mineableBlock.transactions = useableTransactions;
-		
-	}
-	
-	public void getTransaction() {
-		
 	}
 	
 	public void sentToFull() {
-		
+		StringUtil.getFullNode().recievedBlocks.add(minedBlock);
 	}
 	
-	public void mineBlock(int difficulty) {
-		merkleRoot = StringUtil.getMerkleRoot(transactions);
+	public Block mineBlock(int difficulty) {
+		mineableBlock.merkleRoot = StringUtil.getMerkleRoot(mineableBlock.transactions);
 		String target = StringUtil.getDificultyString(difficulty); //Create a string with difficulty * "0" 
-		while(!hash.substring( 0, difficulty).equals(target)) {
-			nonce ++;
-			hash = StringUtil.calculateHash(this);
+		while(!mineableBlock.hash.substring( 0, difficulty).equals(target)) {
+			mineableBlock.nonce ++;
+			mineableBlock.hash = StringUtil.calculateHash(mineableBlock);
 		}
-		System.out.println("Block Mined!!! : " + hash);
+		System.out.println("Block Mined!!! : " + mineableBlock.hash);
+		minedBlock = mineableBlock;
+		return minedBlock;
 	}
 	
 	public boolean addTransaction(Transaction transaction) {
@@ -67,4 +68,11 @@ public class Miner extends Node{
 		return true;
 	}
 	
+	public float calcMinerReward() {
+		float temp=0;
+		for(int i=0; i<mineableBlock.transactions.size(); i++) {
+			temp = temp + mineableBlock.transactions.get(i).minerFee;
+		}
+		return temp + VaultyChain.blockMinedReward;
+	}
 }
