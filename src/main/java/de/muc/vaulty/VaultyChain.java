@@ -16,18 +16,15 @@ public class VaultyChain {
 	
 	public static int difficulty = 3;
 	public static float minimumTransaction = 0.1f;
-	public static Wallet walletA;
-	public static Wallet walletB;
-	public static Transaction genesisTransaction;
 	public static HashMap<String, Wallet> wallets = new HashMap<String,Wallet>();
 	public static float blockMinedReward = 20.0f;
-	public static Wallet coinbase;
+	public static Wallet coinbase = new Wallet("coinbase");
 	
 
 	public static void main(String[] args) {	
 		//add our blocks to the blockchain ArrayList:
-		
 		new MainFrame();
+		
 		
 	}
 	
