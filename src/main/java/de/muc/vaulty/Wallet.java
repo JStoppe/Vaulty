@@ -12,6 +12,7 @@ public class Wallet {
 	public String username;
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
+	public FullNode FullNode;
 	
 	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
 	
@@ -33,6 +34,7 @@ public class Wallet {
 	        privateKey = keyPair.getPrivate();
 	        publicKey = keyPair.getPublic();
 	        VaultyChain.wallets.put(StringUtil.getStringFromKey(this.publicKey),this);
+	        this.FullNode = StringUtil.getFullNode();
 	        
 		}catch(Exception e) {
 			throw new RuntimeException(e);
@@ -41,9 +43,9 @@ public class Wallet {
 	
 	public float getBalance() {
 		float total = 0;	
-        for (Map.Entry<String, TransactionOutput> item: getFullNode().UTXOset.entrySet()){
+        for (Map.Entry<String, TransactionOutput> item: FullNode.UTXOset.entrySet()){
         	TransactionOutput UTXO = item.getValue();
-            if(UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
+            if(UTXO.isMine(publicKey) && !UTXO.locked) { //if output belongs to me ( if coins belong to me )
             	UTXOs.put(UTXO.id,UTXO); //add it to our list of unspent transactions.
             	total += UTXO.value ; 
             }
@@ -51,39 +53,31 @@ public class Wallet {
 		return total;
 	}
 	
-	public Transaction sendFunds(PublicKey _recipient,float value ) {
-		if(getBalance() < value) {
+	public Transaction sendFunds(PublicKey _recipient,float value, float fee) {
+		
+		FullNode = StringUtil.getFullNode();
+		
+		if(getBalance() < value + fee) {
 			System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
 			return null;
 		}
-		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+		ArrayList<TransactionOutput> inputs = new ArrayList<TransactionOutput>();
 		
 		float total = 0;
 		for (Map.Entry<String, TransactionOutput> item: UTXOs.entrySet()){
 			TransactionOutput UTXO = item.getValue();
 			total += UTXO.value;
-			inputs.add(new TransactionInput(UTXO.id));
-			if(total > value) break;
+			inputs.add(UTXO);
+			if(total >= value + fee) break;
 		}
 		
-		Transaction newTransaction = new Transaction(publicKey, _recipient , value, inputs);
-		newTransaction.generateSignature(privateKey);
+		Transaction newTransaction = new Transaction(publicKey, _recipient , value, fee, inputs, this);
+		StringUtil.generateSignature(privateKey, newTransaction);
+		StringUtil.validateTransaction(newTransaction, FullNode);
 		
-		for(TransactionInput input: inputs){
-			UTXOs.remove(input.transactionOutputId);
-		}
+		FullNode.recievedTransactions.add(newTransaction);
 		
 		return newTransaction;
-	}
-	
-	private FullNode getFullNode() {
-		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
-		for(Node n : VaultyChain.Network) {
-			if(n.NodeClass == "FullNode")
-				FullNodes.add((FullNode)n);
-		}
-		Random random = new Random();
-		return FullNodes.get(random.nextInt(FullNodes.size()));
 	}
 	
 }

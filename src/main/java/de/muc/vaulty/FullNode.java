@@ -20,10 +20,26 @@ public class FullNode extends Node implements Serializable{
 	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 	
 	
-	private void processRB() {
+	private void processResievedBlocks() {
 		
 	}
 	
+	private void processRecievedTransactions() { 
+		for(Transaction t : recievedTransactions) {
+			if(StringUtil.validateTransaction(t, this)) {
+				for(Node n : VaultyChain.Network) {
+					if(n.NodeClass == "FullNode") {
+						FullNode fn = (FullNode)n;
+						fn.recievedTransactions.add(t);
+					}
+				}
+				for(TransactionOutput tout : t.inputs) {
+					tout.locked = true;
+					memPool.add(t);
+				}
+			}
+		}
+	}
 	private void updateUTXOs() {
 		// delete used Outputs
 		// create new unspent Outputs
@@ -66,7 +82,7 @@ public class FullNode extends Node implements Serializable{
 		
 	}
 
-	private FullNode getFullNode() {
+	private FullNode getOtherFullNode() {
 		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
 		for(Node n : VaultyChain.Network) {
 			if(n.NodeClass == "FullNode" && n.nodeID != this.nodeID)
