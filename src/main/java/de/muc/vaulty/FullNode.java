@@ -19,12 +19,17 @@ public class FullNode extends Node implements Serializable {
 	public ArrayList<Block> recievedBlocks = new ArrayList<Block>();
 	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 
-
 	private void processReceivedBlocks() {
-		Block rb = recievedBlocks.get(1);
+		Block rb = recievedBlocks.get(0);
 		if (isBlockValid(rb)) {
+			for (int i = 0; i < VaultyChain.Network.size(); i++) {
+				if (VaultyChain.Network.get(i).NodeClass.equals("Miner")) {
+					Miner m = (Miner) (VaultyChain.Network.get(i));
+					m.newBlockValidatedByNote = true;
+				}
+			}
 			ArrayList<FullNode> fullnodes = getOtherFullNodes();
-			for(FullNode fn : fullnodes) {
+			for (FullNode fn : fullnodes) {
 				fn.recievedBlocks.add(rb);
 			}
 			updateUTXOs();
@@ -38,9 +43,9 @@ public class FullNode extends Node implements Serializable {
 		for (Transaction t : recievedTransactions) {
 			if (StringUtil.validateTransaction(t, this)) {
 				for (FullNode n : getOtherFullNodes()) {
-						n.recievedTransactions.add(t);
+					n.recievedTransactions.add(t);
 				}
-				if(!memPool.contains(t)) {
+				if (!memPool.contains(t)) {
 					for (TransactionOutput tout : t.inputs) {
 						tout.locked = true;
 						memPool.add(t);
@@ -69,7 +74,7 @@ public class FullNode extends Node implements Serializable {
 
 		for (Transaction transaction : this.blockchain.get(this.blockchain.size() - 1).transactions) {
 			for (int i = 0; i < this.memPool.size(); i++) {
-				if (transaction.transactionId == memPool.get(i).transactionId) {
+				if (transaction.transactionId.equals(memPool.get(i).transactionId)) {
 					memPool.remove(i);
 				}
 			}
@@ -161,7 +166,7 @@ public class FullNode extends Node implements Serializable {
 	private boolean isBlockValid(Block block) {
 		if (block.merkleRoot != StringUtil.getMerkleRoot(block.transactions))
 			return false;
-		if(block.previousHash != blockchain.get(blockchain.size()-1).hash)
+		if (block.previousHash != blockchain.get(blockchain.size() - 1).hash)
 			return false;
 		String target = StringUtil.getDificultyString(VaultyChain.difficulty); // Create a string with difficulty * "0"
 		if (StringUtil.calculateHash(block).substring(0, VaultyChain.difficulty).equals(target)) {
@@ -174,7 +179,7 @@ public class FullNode extends Node implements Serializable {
 	private ArrayList<FullNode> getOtherFullNodes() {
 		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
 		for (Node n : VaultyChain.Network) {
-			if (n.NodeClass == "FullNode" && n.nodeID != this.nodeID)
+			if (n.NodeClass.equals("FullNode") && n.nodeID != this.nodeID)
 				FullNodes.add((FullNode) n);
 		}
 		return FullNodes;
@@ -183,12 +188,20 @@ public class FullNode extends Node implements Serializable {
 	public String getLastHash() {
 		return this.blockchain.get(this.blockchain.size() - 1).hash;
 	}
-	
+
 	@Override
 	public void run() {
-		if(recievedTransactions.size()!=0)
-			processRecievedTransactions();
-		if(recievedBlocks.size()!=0) 
-			processReceivedBlocks();
+		while(true) {
+			if (recievedTransactions.size() != 0)
+				processRecievedTransactions();
+			if (recievedBlocks.size() != 0)
+				processReceivedBlocks();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

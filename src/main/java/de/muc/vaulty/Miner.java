@@ -10,6 +10,7 @@ public class Miner extends Node{
 	Block minedBlock;
 	FullNode fullNode;
 	Wallet minerWallet;
+	boolean newBlockValidatedByNote = false;
 	
 	
 	public Miner(String nodeID, Wallet walletID) {
