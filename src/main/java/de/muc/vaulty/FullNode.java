@@ -19,11 +19,13 @@ public class FullNode extends Node implements Serializable {
 	public ArrayList<Block> recievedBlocks = new ArrayList<Block>();
 	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 
-	private void processResievedBlocks() {
+
+	private void processReceivedBlocks() {
 		Block rb = recievedBlocks.get(1);
-		if(isBlockValid(rb)) {
-			
+		if (isBlockValid(rb)) {
+
 		}
+
 	}
 
 	private void processRecievedTransactions() {
@@ -44,6 +46,7 @@ public class FullNode extends Node implements Serializable {
 	}
 
 	private void updateUTXOs() {
+
 		for (Transaction transaction : this.blockchain.get(this.blockchain.size() - 1).transactions) {
 			for (TransactionOutput tout : transaction.inputs) {
 				UTXOset.remove(tout.id);
@@ -57,6 +60,7 @@ public class FullNode extends Node implements Serializable {
 
 	private void updateMemPool() {
 		// Blocks successfully mined
+
 		for (Transaction transaction : this.blockchain.get(this.blockchain.size() - 1).transactions) {
 			for (int i = 0; i < this.memPool.size(); i++) {
 				if (transaction.transactionId == memPool.get(i).transactionId) {
@@ -64,6 +68,9 @@ public class FullNode extends Node implements Serializable {
 				}
 			}
 		}
+
+		// delete Transactions included in this Block
+
 	}
 
 	public Boolean isChainValid() {
@@ -173,8 +180,8 @@ public class FullNode extends Node implements Serializable {
 		}
 		return FullNodes;
 	}
-	
+
 	public String getLastHash() {
-		return this.blockchain.get(this.blockchain.size()-1).hash;
+		return this.blockchain.get(this.blockchain.size() - 1).hash;
 	}
 }
