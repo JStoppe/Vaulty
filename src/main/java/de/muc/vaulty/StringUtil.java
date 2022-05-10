@@ -119,7 +119,7 @@ public class StringUtil {
 	public static FullNode getFullNode() {
 		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
 		for(Node n : VaultyChain.Network) {
-			if(n.NodeClass == "FullNode")
+			if(n.NodeClass.equals("FullNode"))
 				FullNodes.add((FullNode)n);
 		}
 		Random random = new Random();
