@@ -11,6 +11,7 @@ public class Block {
 	public ArrayList<Transaction> transactions = new ArrayList<Transaction>(); //our data will be a simple message.
 	public long timeStamp; //as number of milliseconds since 1/1/1970.
 	public int nonce;
+	
 		
 	//Block Constructor.  
 	public Block(String previousHash ) {
