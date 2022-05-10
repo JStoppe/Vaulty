@@ -18,6 +18,8 @@ public class Miner extends Node{
 		super.NodeClass = "Miner";
 		
 	}
+	
+	
 		
 	public void buildBlock() {
 		this.fullNode= StringUtil.getFullNode();	
@@ -40,14 +42,25 @@ public class Miner extends Node{
 	
 	public void sentToFull() {
 		StringUtil.getFullNode().recievedBlocks.add(minedBlock);
+		minedBlock = null;
 	}
 	
 	public Block mineBlock(int difficulty) {
+		int a = 0;
 		mineableBlock.merkleRoot = StringUtil.getMerkleRoot(mineableBlock.transactions);
 		String target = StringUtil.getDificultyString(difficulty); //Create a string with difficulty * "0" 
 		while(!mineableBlock.hash.substring( 0, difficulty).equals(target)) {
-			mineableBlock.nonce ++;
-			mineableBlock.hash = StringUtil.calculateHash(mineableBlock);
+			while(!mineableBlock.hash.substring( 0, difficulty).equals(target) && a < 100) {
+				mineableBlock.nonce ++;
+				mineableBlock.hash = StringUtil.calculateHash(mineableBlock);
+				a++;
+			}
+			if(newBlockValidatedByNote) {
+				newBlockValidatedByNote = false;
+				mineableBlock = null;
+				return mineableBlock;
+			}
+			a = 0;
 		}
 		System.out.println("Block Mined!!! : " + mineableBlock.hash);
 		minedBlock = mineableBlock;
@@ -75,5 +88,17 @@ public class Miner extends Node{
 			temp = temp + mineableBlock.transactions.get(i).minerFee;
 		}
 		return temp + VaultyChain.blockMinedReward;
+	}
+	
+	@Override
+	
+	public void run() {
+		while(true) {
+		buildBlock();
+		
+		mineBlock(VaultyChain.difficulty);
+		if(minedBlock != null)
+		sentToFull();
+		}
 	}
 }
