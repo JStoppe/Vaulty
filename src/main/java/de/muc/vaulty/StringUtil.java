@@ -96,7 +96,7 @@ public class StringUtil {
 	}
 	
 	public static void printBlockchainToTerminal(ArrayList<Block> blockchain) {
-		System.out.println("\n##############################################################\nThe Vaulty Block Chain:\n##############################################################\\n");
+		System.out.println("\n##############################################################\nThe Vaulty Block Chain:\n##############################################################\n");
 		for(Block b : blockchain) {
 			System.out.println("\n\n\n##############################################################\nBlock_ID: " + b.hash);
 			for(int i = 0; i < b.transactions.size(); i++) {

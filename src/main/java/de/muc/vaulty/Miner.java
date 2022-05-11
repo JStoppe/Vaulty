@@ -32,7 +32,7 @@ public class Miner extends Node{
 		}
 		mineableBlock.transactions.add(new Transaction(VaultyChain.coinbase.publicKey, this.minerWallet.publicKey, 0, 0, null, VaultyChain.coinbase));
 		
-		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 10000 > new Date().getTime()) {
+		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 20000 > new Date().getTime()) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -53,6 +53,7 @@ public class Miner extends Node{
 		}
 		if(this.mineableBlock.transactions.size()>0) {
 		this.mineableBlock.transactions.get(0).value = this.calcMinerReward();
+		this.mineableBlock.transactions.get(0).outputs.get(0).value = this.calcMinerReward();
 		}		
 	}
 	
