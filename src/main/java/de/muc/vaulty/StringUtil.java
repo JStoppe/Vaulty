@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import com.google.gson.GsonBuilder;
 import java.util.List;
+import java.util.Random;
 
 public class StringUtil {
 	
@@ -95,7 +96,7 @@ public class StringUtil {
 	}
 	
 	public static void printBlockchainToTerminal(ArrayList<Block> blockchain) {
-		System.out.println("\n##############################################################\nThe Vaulty Block Chain:\n##############################################################\\n");
+		System.out.println("\n##############################################################\nThe Vaulty Block Chain:\n##############################################################\n");
 		for(Block b : blockchain) {
 			System.out.println("\n\n\n##############################################################\nBlock_ID: " + b.hash);
 			for(int i = 0; i < b.transactions.size(); i++) {
@@ -104,4 +105,58 @@ public class StringUtil {
 			System.out.println("##############################################################");
 		}
 	}
+	
+	public static String calculateHash(Block block) {
+		String calculatedhash = StringUtil.applySha256( 
+				block.previousHash +
+				Long.toString(block.timeStamp) +
+				Integer.toString(block.nonce) + 
+				block.merkleRoot
+				);
+		return calculatedhash;
+	}
+	
+	public static FullNode getFullNode() {
+		ArrayList<FullNode> FullNodes = new ArrayList<FullNode>();
+		for(Node n : VaultyChain.Network) {
+			if(n.NodeClass.equals("FullNode"))
+				FullNodes.add((FullNode)n);
+		}
+		Random random = new Random();
+		return FullNodes.get(random.nextInt(FullNodes.size()));
+	}
+
+	public static boolean validateTransaction(Transaction t, FullNode fn) {
+		if(StringUtil.verifySignature(t) == false) {
+			System.out.println("#Transaction Signature failed to verify");
+			return false;
+		}
+		for(TransactionOutput i : t.inputs) {
+			if(!fn.UTXOset.containsValue(i)) {
+				System.out.println("TransactionInput not found in UTXOset!" + i);
+				return false;
+			}
+		}
+		if(t.value < VaultyChain.minimumTransaction) {
+			System.out.println("Transaction value to small! Minimum transaction value is " + VaultyChain.minimumTransaction);
+			return false;
+		}
+		if(t.senderWallet.getBalance() < t.value + t.minerFee) {
+			System.out.println("You don't have the funds to execute this transaction");
+			return false;
+		}
+		return true;
+	}
+	
+	public static void generateSignature(PrivateKey privateKey, Transaction t) {
+		String data = StringUtil.getStringFromKey(t.sender) + StringUtil.getStringFromKey(t.reciepient) + Float.toString(t.value) + Float.toString(t.minerFee);
+		t.signature = StringUtil.applyECDSASig(privateKey,data);		
+	}
+	
+	public static boolean verifySignature(Transaction t) {
+
+		String data = StringUtil.getStringFromKey(t.sender) + StringUtil.getStringFromKey(t.reciepient) + Float.toString(t.value) + Float.toString(t.minerFee);
+		return StringUtil.verifyECDSASig(t.sender, data, t.signature);
+	}
+	
 }
