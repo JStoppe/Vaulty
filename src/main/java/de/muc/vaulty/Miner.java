@@ -9,8 +9,8 @@ public class Miner extends Node{
 	Block mineableBlock;
 	Block minedBlock;
 	FullNode fullNode;
-	int i=1;
-	Wallet minerWallet = new Wallet("Miner " + i++);	
+	int minerCount=1;
+	Wallet minerWallet = new Wallet("Miner " + new Date().getTime());	
 	boolean newBlockValidatedByNote = false;
 	
 	
@@ -31,10 +31,19 @@ public class Miner extends Node{
 		this.mineableBlock = new Block(this.fullNode.getLastHash());
 		}
 		mineableBlock.transactions.add(new Transaction(VaultyChain.coinbase.publicKey, this.minerWallet.publicKey, 0, 0, null, VaultyChain.coinbase));
-		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 200000 < new Date().getTime()) {
+		
+		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 10000 > new Date().getTime()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(fullNode.memPool.isEmpty())
+				continue;
 			int i = 0;
 			if(fullNode.memPool.get(i) == null ){
-				break;
+				continue;
 			}
 			else {
 				addTransaction(fullNode.memPool.get(i));
@@ -44,8 +53,7 @@ public class Miner extends Node{
 		}
 		if(this.mineableBlock.transactions.size()>0) {
 		this.mineableBlock.transactions.get(0).value = this.calcMinerReward();
-		}
-		this.mineableBlock.transactions = useableTransactions;
+		}		
 	}
 	
 	public void sentToFull() {
@@ -71,6 +79,7 @@ public class Miner extends Node{
 			a = 0;
 		}
 		System.out.println("Block Mined!!! : " + mineableBlock.hash);
+		
 		minedBlock = mineableBlock;
 		return minedBlock;
 	}

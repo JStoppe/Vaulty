@@ -22,6 +22,7 @@ public class FullNode extends Node implements Serializable {
 	private void processReceivedBlocks() {
 		Block rb = recievedBlocks.get(0);
 		if (isBlockValid(rb)) {
+			blockchain.add(rb);
 			for (int i = 0; i < VaultyChain.Network.size(); i++) {
 				if (VaultyChain.Network.get(i).NodeClass.equals("Miner")) {
 					Miner m = (Miner) (VaultyChain.Network.get(i));
@@ -34,7 +35,6 @@ public class FullNode extends Node implements Serializable {
 			}
 			updateUTXOs();
 			updateMemPool();
-			recievedBlocks.clear();
 		}
 		recievedBlocks.remove(0);
 	}
@@ -57,15 +57,14 @@ public class FullNode extends Node implements Serializable {
 	}
 
 	private void updateUTXOs() {
-
+		
 		for (Transaction transaction : this.blockchain.get(this.blockchain.size() - 1).transactions) {
-			for (TransactionOutput tout : transaction.inputs) {
-				UTXOset.remove(tout.id);
+			if(transaction.inputs != null) {
+				for (TransactionOutput tout : transaction.inputs) 
+					UTXOset.remove(tout.id);
 			}
-			for (TransactionOutput tout : transaction.outputs) {
-				UTXOset.put(tout.id, tout);
-			}
-
+			for (TransactionOutput tout : transaction.outputs) 
+				UTXOset.put(tout.id, tout);				
 		}
 	}
 
@@ -88,12 +87,7 @@ public class FullNode extends Node implements Serializable {
 		Block currentBlock;
 		Block previousBlock;
 		String hashTarget = new String(new char[VaultyChain.difficulty]).replace('\0', '0');
-		HashMap<String, TransactionOutput> tempUTXOs = new HashMap<String, TransactionOutput>(); // a temporary working
-																									// list of unspent
-																									// transactions at a
-																									// given block
-																									// state.
-
+		HashMap<String, TransactionOutput> tempUTXOs = new HashMap<String, TransactionOutput>(); 
 		// loop through blockchain to check hashes:
 		for (int i = 1; i < blockchain.size(); i++) {
 			if (i == 1) {
@@ -166,8 +160,10 @@ public class FullNode extends Node implements Serializable {
 	private boolean isBlockValid(Block block) {
 		if (block.merkleRoot != StringUtil.getMerkleRoot(block.transactions))
 			return false;
-		if (block.previousHash != blockchain.get(blockchain.size() - 1).hash)
-			return false;
+		if(blockchain.size()>0) {
+			if (block.previousHash != blockchain.get(blockchain.size() - 1).hash)
+				return false;
+		}
 		String target = StringUtil.getDificultyString(VaultyChain.difficulty); // Create a string with difficulty * "0"
 		if (StringUtil.calculateHash(block).substring(0, VaultyChain.difficulty).equals(target)) {
 			return true;
