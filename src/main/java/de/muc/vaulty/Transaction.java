@@ -30,7 +30,8 @@ public class Transaction {
 	
 	public void genarateTransactionOutputs() {
 		//Generate transaction outputs:
-		float leftOver = getInputsValue() - value; //get value of inputs then the left over change:
+		float leftOver = getInputsValue() - value;//get value of inputs then the left over change:
+		System.out.println("========= "+value+" =========");
 		transactionId = calulateHash();
 		outputs.add(new TransactionOutput( this.reciepient, value,transactionId)); //send value to recipient
 		if(leftOver > 0)
