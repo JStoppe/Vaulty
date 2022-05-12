@@ -38,8 +38,6 @@ public class VaultyChain {
 		node02.start();
 		miner01.start();
 		miner02.start();
-		String walletName = wallets.get(StringUtil.getStringFromKey(Transaction.sender)).username;
-		System.out.println(walletName);
 		
 		java.awt.EventQueue.invokeLater(new Runnable() {
 		       public void run() {
