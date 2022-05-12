@@ -8,14 +8,13 @@ import java.util.Map;
 
 import com.google.gson.GsonBuilder;
 
-import de.muc.vaulty.view.MainFrame;
-
 public class VaultyChain {
 	
 	public static ArrayList<Node> Network = new ArrayList<Node>();
 	public static int difficulty = 5;
 	public static float minimumTransaction = 0.1f;
 	public static HashMap<String, Wallet> wallets = new HashMap<String,Wallet>();
+	public static ArrayList<Wallet> walletsNeu = new ArrayList<Wallet>();
 	public static float blockMinedReward = 20.0f;
 	public static Wallet coinbase; 
 	
@@ -24,22 +23,28 @@ public class VaultyChain {
 //		//add our blocks to the blockchain ArrayList:
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		
-		new MainFrame();
+//		new MainFrame();
 		
 		FullNode node01 = new FullNode("node01");
 		FullNode node02 = new FullNode("node02");
 		
 		coinbase = new Wallet("coinbase");
-		Wallet walletA = new Wallet("walletA");
-		Wallet walletB = new Wallet("walletA");
+		Wallet walletA = new Wallet("Wallet A");
+		Wallet walletB = new Wallet("Wallet B");
 		
-		Miner miner01 = new Miner("miner01", new Wallet("walletMiner01"));
-		Miner miner02 = new Miner("miner02", new Wallet("walletMiner01"));
+		Miner miner01 = new Miner("miner01","Miner 01");
+		Miner miner02 = new Miner("miner02","Miner 02");
 		
 		node01.start();
 		node02.start();
 		miner01.start();
 		miner02.start();
+		
+		java.awt.EventQueue.invokeLater(new Runnable() {
+		       public void run() {
+		          de.muc.vaulty.view.MVC.createAndShowUI();
+		       }
+		    });
 		
 		while(true) {
 			try {
