@@ -98,7 +98,7 @@ public class Control {
 	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
 
 	   View.walletNameA.setText(input);
-	   Wallet myWallet = new Wallet("jokeWallet");
+	   Wallet myWallet = VaultyChain.walletsNeu.get(1);
 	   for(Wallet w : VaultyChain.walletsNeu) {
 		   if(w.username == input) {
 			   myWallet = w;

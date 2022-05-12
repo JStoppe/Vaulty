@@ -39,7 +39,6 @@ public class VaultyChain {
 		miner01.start();
 		miner02.start();
 
-		
 		java.awt.EventQueue.invokeLater(new Runnable() {
 		       public void run() {
 		          de.muc.vaulty.view.MVC.createAndShowUI();
