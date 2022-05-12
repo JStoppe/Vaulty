@@ -24,6 +24,12 @@ public class Miner extends Node{
 		
 	public void buildBlock() {
 		this.fullNode= StringUtil.getFullNode();
+		
+		System.out.println("##########################  mempool  ##################################");	
+		for(Transaction t : fullNode.memPool)
+			System.out.println(t);
+			
+			
 		if(this.fullNode.blockchain.isEmpty()) {
 			this.mineableBlock = new Block("0");
 		}
@@ -34,7 +40,7 @@ public class Miner extends Node{
 		
 		while(this.mineableBlock.transactions.size() < 10 && this.mineableBlock.timeStamp + 20000 > new Date().getTime()) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

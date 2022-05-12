@@ -23,32 +23,32 @@ import java.security.*;
 import de.muc.vaulty.*;
 
 public class Control {
-   private Model model;
-   JDialog jd = new JDialog();
-   JPanel jp = new JPanel();
-   JButton ok = new JButton("OK");
-   JButton cancel = new JButton("Abbrechen");
-   
-   private String name;
-   private int age;
-   private int birthYear;
+	private Model model;
+	JDialog jd = new JDialog();
+	JPanel jp = new JPanel();
+	JButton ok = new JButton("OK");
+	JButton cancel = new JButton("Abbrechen");
 
-   public Control(Model model) {
-      this.model = model;
+	private String name;
+	private int age;
+	private int birthYear;
+
+	public Control(Model model) {
+		this.model = model;
 //      JDialog jd = new JDialog();
 //      JPanel jp = new JPanel();
-      jd.setLayout(new BorderLayout());
-      jd.setTitle("SEND FUNDS");
-      jp.setLayout(new BoxLayout(jp, BoxLayout.LINE_AXIS));
-      jd.add(jp);
+		jd.setLayout(new BorderLayout());
+		jd.setTitle("SEND FUNDS");
+		jp.setLayout(new BoxLayout(jp, BoxLayout.LINE_AXIS));
+		jd.add(jp);
 //      this.jd = jd;
-      
-      name = "WalletA";
-      age = 19;
-      birthYear = 1994;
-   }
 
-   // all this simplistic control does is change the state of the model, that's it
+		name = "WalletA";
+		age = 19;
+		birthYear = 1994;
+	}
+
+	// all this simplistic control does is change the state of the model, that's it
 //   public void startButtonActionPerformed(ActionEvent ae) {
 ////      model.setState(State.START);
 ////	   JDialog jd = new JDialog();
@@ -68,79 +68,79 @@ public class Control {
 //	}
 //
 //   }
-   
-   public void addWallet(ActionEvent ae) {
-	   
-	   JPanel fields = new JPanel(new GridLayout(2, 1));
-	   JTextField field = new JTextField(10);
-	   JComboBox<String> comboBox = new JComboBox<>(new String[]{"Wallet", "Miner", "FullNode"});
 
-	   fields.add(field);
-	   fields.add(comboBox);
+	public void addWallet(ActionEvent ae) {
 
-	   int result = JOptionPane.showConfirmDialog(null, fields, "Breakfast", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-	   switch (result) {
-	       case JOptionPane.OK_OPTION:
-	           // Process the results...
-	           break;
-	   }
-   }
-   public void addMiner(ActionEvent ae) {
-	   
-   }
-   public void addFullNode(ActionEvent ae) {
-	   
-   }
-   
-   public void changeWallet(ActionEvent ae) {  
-	   String[] names = getWallets();
-	   String input = (String) JOptionPane.showInputDialog(null, "Select Wallet",
-	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
+		JPanel fields = new JPanel(new GridLayout(2, 1));
+		JTextField field = new JTextField(10);
+		JComboBox<String> comboBox = new JComboBox<>(new String[] { "Wallet", "Miner", "FullNode" });
 
-	   View.walletNameA.setText(input);
-	   Wallet myWallet = VaultyChain.walletsNeu.get(1);
-	   for(Wallet w : VaultyChain.walletsNeu) {
-		   if(w.username == input) {
-			   myWallet = w;
-			   break;
-		   }
-	   }
-	   View.balanceA.setText(String.valueOf(myWallet.getBalance()));
-	   myWallet = null;
-	    
-   }
-   
-   public String[] getWallets() {
-	   String[] walletNames = new String[VaultyChain.walletsNeu.size()];
-	   
-	   int i = 0;
-	   for(Wallet walletName : VaultyChain.walletsNeu) {
-		   walletNames [i]= walletName.username;
-		   i++;
-	   }
-	   for(String s : walletNames) {
-		   System.out.println(s);
-	   }
-	   return walletNames;
-   }
-   
-   public void changeWalletB(ActionEvent ae) {  
-	   String[] names = getWallets();
-	   String input = (String) JOptionPane.showInputDialog(null, "Select Wallet",
-	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
+		fields.add(field);
+		fields.add(comboBox);
 
-	   View.walletNameB.setText(input);
-	   Wallet myWallet = VaultyChain.walletsNeu.get(1);
-	   for(Wallet w : VaultyChain.walletsNeu) {
-		   if(w.username == input) {
-			   myWallet = w;
-			   break;
-		   }
-	   }
-	   View.balanceB.setText(String.valueOf(myWallet.getBalance()));
-	   myWallet = null;  
-   }
-   
+		int result = JOptionPane.showConfirmDialog(null, fields, "Breakfast", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+		switch (result) {
+		case JOptionPane.OK_OPTION:
+			// Process the results...
+			break;
+		}
+	}
+
+	public void addMiner(ActionEvent ae) {
+
+	}
+
+	public void addFullNode(ActionEvent ae) {
+
+	}
+
+	public void changeWallet(ActionEvent ae) {
+		String[] names = getWallets();
+		String input = (String) JOptionPane.showInputDialog(null, "Select Wallet", "CHANGE WALLET",
+				JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
+
+		View.walletNameA.setText(input);
+		Wallet myWallet = VaultyChain.walletsNeu.get(1);
+		for (Wallet w : VaultyChain.walletsNeu) {
+			if (w.username == input) {
+				myWallet = w;
+				break;
+			}
+		}
+		View.balanceA.setText(String.valueOf(myWallet.getBalance()));
+		myWallet = null;
+
+	}
+
+	public String[] getWallets() {
+		String[] walletNames = new String[VaultyChain.walletsNeu.size()];
+
+		int i = 0;
+		for (Wallet walletName : VaultyChain.walletsNeu) {
+			walletNames[i] = walletName.username;
+			i++;
+		}
+		return walletNames;
+	}
+
+	public void changeWalletB(ActionEvent ae) {
+		String[] names = getWallets();
+		String input = (String) JOptionPane.showInputDialog(null, "Select Wallet", "CHANGE WALLET",
+				JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
+
+		View.walletNameB.setText(input);
+		Wallet myWallet = VaultyChain.walletsNeu.get(1);
+		for (Wallet w : VaultyChain.walletsNeu) {
+			if (w.username == input) {
+				myWallet = w;
+				break;
+			}
+		}
+		View.balanceB.setText(String.valueOf(myWallet.getBalance()));
+		myWallet = null;
+	}
+
 //   public String[] getWalletKey() {
 //	   String[] walletBalance = new String[VaultyChain.walletsNeu.size()];
 //	   int x=0;
@@ -153,8 +153,7 @@ public class Control {
 //	   }	   
 //	   return walletBalance;
 //   }
-	   
-	
+
 //   public String[] getWallets() {
 //	   String[] walletNames = new String[VaultyChain.wallets.size()];
 //	   for(Wallet walletName : VaultyChain.wallets) {
@@ -168,7 +167,7 @@ public class Control {
 //	   return walletNames;
 //	  }
 //	   
-	   
+
 //	   String[] keys = new String[VaultyChain.wallets.size()];
 //	   Object[] values = new Object[VaultyChain.wallets.size()];
 //	   int index = 0;
@@ -204,21 +203,18 @@ public class Control {
 //		        arr2[1]);
 //	    
 //	    System.out.println(arr2);
-	   
 
-	   
-	   
-	   //Liste erstellter Wallets (usernames)
+	// Liste erstellter Wallets (usernames)
 //	   for() {
 //	   String user = String.valueOf(Wallet.username);
 //	   String[] 
 //	   }
-	   
+
 //	   String walletName = VaultyChain.wallets.get(StringUtil.getStringFromKey(Wallet.publicKey)).username;
 //	   String walletName = VaultyChain.wallets.String.valueOf(Wallet.username);
 
 //	   System.out.println(user);
-	   
+
 //	   String[] choices = { "A", "B", "C", "D", "E", "F" };
 //	    String input = (String) JOptionPane.showInputDialog(null, "Select Wallet",
 //	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, // Use
@@ -227,46 +223,64 @@ public class Control {
 //	        choices, // Array of choices
 //	        choices[1]); // Initial choice
 //	    System.out.println(input);
-	   
+
 //   }
-   
-   public void selectRecipient(ActionEvent ae) {
-	   String[] names = getWallets();
-	   String input = (String) JOptionPane.showInputDialog(null, "Select Wallet",
-	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
+
+	public void selectRecipient(ActionEvent ae) {
+		String[] names = getWallets();
+		String input = (String) JOptionPane.showInputDialog(null, "Select Wallet", "CHANGE WALLET",
+				JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
 
 //	   View.walletNameA.setText(input);
-	   Wallet otherWallet = new Wallet("jokeWallet");
-	   for(Wallet w : VaultyChain.walletsNeu) {
-		   if(w.username == input) {
-			   otherWallet = w;
-			   break;
-		   }
-	   }
+		Wallet otherWallet = VaultyChain.walletsNeu.get(1);
+		for (Wallet w : VaultyChain.walletsNeu) {
+			if (w.username == input) {
+				otherWallet = w;
+				break;
+			}
+		}
 //	   View.balanceA.setText(String.valueOf(myWallet.getBalance()));
 //	   String store =;
 //	   otherWallet = null;
-	   
 
-	    
-   }
-   
-   public void transferVaulty(ActionEvent ae) {
-	   
-	   
-	   // If valid Transaction 
-	   JOptionPane.showMessageDialog(jd,
-			    "Transaction successfully added to mempool",
-			    "SEND FUNDS",
-			    JOptionPane.PLAIN_MESSAGE);
-   }
-   
-   public void showWalletInfo(ActionEvent ae) {
-	   JOptionPane.showMessageDialog(
-	            null, getPanel(), "WALLET INFO",
-	                JOptionPane.INFORMATION_MESSAGE);
-   }
-	   
+	}
+
+	public void transferVaultyA(ActionEvent ae) {
+		Wallet thisWallet = null,thatWallet = null;
+		String walletName = View.walletNameA.getText();
+		for(Wallet w : VaultyChain.walletsNeu) {
+			if(w.username == walletName) {
+				thisWallet = w;
+				break;
+			}
+		}
+		String walletNameReciepient = View.walletNameB.getText();
+		for(Wallet w : VaultyChain.walletsNeu) {
+			if(w.username == walletNameReciepient) {
+				thatWallet = w;
+				break;
+			}
+		}
+		if(thisWallet != null && thisWallet != null) {
+			thisWallet.sendFunds(thatWallet.publicKey,Float.parseFloat(View.amountA.getText()),Float.parseFloat(View.feeA.getText()));
+		}
+		
+		// If valid Transaction
+		JOptionPane.showMessageDialog(jd, "Transaction successfully added to mempool", "SEND FUNDS",
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public void transferVaultyB(ActionEvent ae) {
+
+		// If valid Transaction
+		JOptionPane.showMessageDialog(jd, "Transaction successfully added to mempool", "SEND FUNDS",
+				JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public void showWalletInfo(ActionEvent ae) {
+		JOptionPane.showMessageDialog(null, getPanel(), "WALLET INFO", JOptionPane.INFORMATION_MESSAGE);
+	}
+
 //	   	jd.setSize(350, 200);
 //	   	jp.add(Box.createHorizontalGlue());
 //		jp.add(ok);
@@ -281,13 +295,12 @@ public class Control {
 //		if(ae.getSource() == ok) {
 //   			jd.dispose();
 //   			jd.setVisible(false);
-	   	
-   
-   public void endButtonActionPerformed(ActionEvent ae) {
-      model.setState(State.END);
-   }
 
-   private JPanel getPanel() {
+	public void endButtonActionPerformed(ActionEvent ae) {
+		model.setState(State.END);
+	}
+
+	private JPanel getPanel() {
 		JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
 		JLabel nameLabel = getLabel("Name: " + name);
 		JLabel adressLabel = getLabel("Adress: " + age);
@@ -297,17 +310,15 @@ public class Control {
 		panel.add(yearLabel);
 
 		return panel;
-   }
-   private JLabel getLabel(String title) {
-       return new JLabel(title);
-   }
+	}
 
-   
-   public static String selectedWallet(String input) {
-	  
-	   
-	   	return input;
-   }
+	private JLabel getLabel(String title) {
+		return new JLabel(title);
+	}
+
+	public static String selectedWallet(String input) {
+
+		return input;
+	}
 
 }
-

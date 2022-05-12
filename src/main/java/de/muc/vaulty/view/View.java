@@ -23,7 +23,7 @@ import de.muc.vaulty.Wallet;
 	   private JPanel mainPanel = new JPanel();
 	   private JPanel topPanel;
 	   private JPanel bottomPanel;
-	   public JTextField amountA, feeA, amountB, feeB;
+	   public static JTextField amountA,feeA,amountB,feeB;
 	   public static JLabel walletNameA, balanceA, totalA, walletNameB, balanceB, totalB;
 	   public static JTextArea  bcDiscplay, minerDisplay;
 	   public JScrollPane blockchainOut, minerOut;
@@ -90,7 +90,7 @@ import de.muc.vaulty.Wallet;
 	         // all the buttons do is call methods of the control
 	         public void actionPerformed(ActionEvent e) {
 	            if (control != null) {
-	               control.transferVaulty(e);
+	               control.transferVaultyA(e);
 	            }
 	         }
 	      });
@@ -98,7 +98,7 @@ import de.muc.vaulty.Wallet;
 		         // all the buttons do is call methods of the control
 		         public void actionPerformed(ActionEvent e) {
 		            if (control != null) {
-		               control.transferVaulty(e);
+		               control.transferVaultyB(e);
 		            }
 		         }
 		      });
