@@ -126,12 +126,19 @@ public class Control {
    
    public void changeWalletB(ActionEvent ae) {  
 	   String[] names = getWallets();
-
 	   String input = (String) JOptionPane.showInputDialog(null, "Select Wallet",
 	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
-	    
+
 	   View.walletNameB.setText(input);
-	    
+	   Wallet myWallet = new Wallet("jokeWallet");
+	   for(Wallet w : VaultyChain.walletsNeu) {
+		   if(w.username == input) {
+			   myWallet = w;
+			   break;
+		   }
+	   }
+	   View.balanceB.setText(String.valueOf(myWallet.getBalance()));
+	   myWallet = null;  
    }
    
 //   public String[] getWalletKey() {
