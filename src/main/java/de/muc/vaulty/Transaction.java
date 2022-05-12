@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Transaction {
 	
 	public String transactionId; //Contains a hash of transaction*
-	public PublicKey sender; //Senders address/public key.
+	public static PublicKey sender; //Senders address/public key.
 	public PublicKey reciepient; //Recipients address/public key.
 	public float value; //Contains the amount we wish to send to the recipient.
 	public byte[] signature; //This is to prevent anybody else from spending funds in our wallet.
