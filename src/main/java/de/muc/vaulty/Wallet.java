@@ -12,7 +12,7 @@ public class Wallet {
 	public String username;
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
-	public FullNode FullNode;
+	public FullNode fullNode;
 
 	public HashMap<String, TransactionOutput> UTXOs = new HashMap<String, TransactionOutput>();
 
@@ -35,7 +35,7 @@ public class Wallet {
 			publicKey = keyPair.getPublic();
 			VaultyChain.wallets.put(StringUtil.getStringFromKey(this.publicKey), this);
 			VaultyChain.walletsNeu.add(this);
-			this.FullNode = StringUtil.getFullNode();
+			this.fullNode = StringUtil.getFullNode();
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -44,7 +44,7 @@ public class Wallet {
 
 	public float getBalance() {
 		float total = 0;
-		for (Map.Entry<String, TransactionOutput> item : FullNode.UTXOset.entrySet()) {
+		for (Map.Entry<String, TransactionOutput> item : fullNode.UTXOset.entrySet()) {
 			TransactionOutput UTXO = item.getValue();
 			if (UTXO.isMine(publicKey) && !UTXO.locked) { // if output belongs to me ( if coins belong to me )
 				UTXOs.put(UTXO.id, UTXO); // add it to our list of unspent transactions.
@@ -56,7 +56,7 @@ public class Wallet {
 
 	public Transaction sendFunds(PublicKey _recipient, float value, float fee) {
 
-		FullNode = StringUtil.getFullNode();
+		fullNode = StringUtil.getFullNode();
 
 		if (getBalance() < value + fee) {
 			System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
@@ -76,10 +76,14 @@ public class Wallet {
 		Transaction newTransaction = new Transaction(publicKey, _recipient, value, fee, inputs, this);
 		System.out.println("Hier steht die Transaction ID von SendFunds: " + newTransaction.transactionId);
 		StringUtil.generateSignature(privateKey, newTransaction);
-		StringUtil.validateTransaction(newTransaction, FullNode);
-
-		FullNode.recievedTransactions.add(newTransaction);
-
+		StringUtil.validateTransaction(newTransaction, fullNode);
+		
+		System.out.println("+++++++++++++++now the Transaction should be added.+++++++++++++++++" + fullNode.nodeID);
+		System.out.println(fullNode.recievedTransactions.size());
+		fullNode.recievedTransactions.add(newTransaction);
+		System.out.println(fullNode.recievedTransactions.size());
+		StringUtil.getFullNode().recievedTransactions.add(newTransaction);
+		System.out.println("+++++++++++++++now the Transaction should be added2.+++++++++++++++++" + fullNode.nodeID);
 		return newTransaction;
 	}
 

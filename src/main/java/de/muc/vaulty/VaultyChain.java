@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 //import com.google.gson.GsonBuilder;
 import java.util.Map;
+import java.util.Scanner;
 
 import com.google.gson.GsonBuilder;
 
 public class VaultyChain {
 	
 	public static ArrayList<Node> Network = new ArrayList<Node>();
-	public static int difficulty = 5;
+	public static int difficulty = 6;
 	public static float minimumTransaction = 0.1f;
 	public static HashMap<String, Wallet> wallets = new HashMap<String,Wallet>();
 	public static ArrayList<Wallet> walletsNeu = new ArrayList<Wallet>();
@@ -44,11 +45,15 @@ public class VaultyChain {
 		          de.muc.vaulty.view.MVC.createAndShowUI();
 		       }
 		    });
-		
+		Scanner sc = new Scanner(System.in);
 		while(true) {
 			try {
-				Thread.sleep(10000);
-				StringUtil.printBlockchainToTerminal(node01.blockchain);
+				Thread.sleep(5000);
+				if(sc.nextLine() != null)
+					System.out.println("Node1:");
+					StringUtil.printBlockchainToTerminal(node01.blockchain);
+					System.out.println("Node2:");
+					StringUtil.printBlockchainToTerminal(node02.blockchain);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

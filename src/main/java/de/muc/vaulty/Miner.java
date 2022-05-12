@@ -21,11 +21,11 @@ public class Miner extends Node {
 
 	public void buildBlock() {
 		this.fullNode = StringUtil.getFullNode();
-
-		System.out.println("##########################  mempool  ##################################");
-		for (Transaction t : fullNode.memPool)
-			System.out.println(t);
-
+		System.out.println(nodeID + " buids block and finds fullnode: " + fullNode.nodeID );
+		System.out.println();
+		for(Transaction t : fullNode.memPool) {
+			System.out.println("mempool: ("+nodeID + ")  " + t);
+		}
 		if (this.fullNode.blockchain.isEmpty()) {
 			this.mineableBlock = new Block("0");
 		} else {
@@ -35,9 +35,9 @@ public class Miner extends Node {
 				null, VaultyChain.coinbase));
 		int i = 0;
 		while (this.mineableBlock.transactions.size() < 10
-				&& this.mineableBlock.timeStamp + 20000 > new Date().getTime()) {
+				&& this.mineableBlock.timeStamp + 5000 > new Date().getTime()) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(250);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -50,8 +50,6 @@ public class Miner extends Node {
 
 				if (!mineableBlock.transactions.contains(fullNode.memPool.get(i))) {
 					addTransaction(fullNode.memPool.get(i));
-					System.out.println("++++++++++ Sender Wallet User Name:" + mineableBlock.transactions.get(i).senderWallet.username);
-					System.out.println("++++++++++ Empfänger Public Key:" + mineableBlock.transactions.get(i).reciepient);
 					i++;
 					System.out.println(i);
 				}
@@ -63,11 +61,21 @@ public class Miner extends Node {
 			this.mineableBlock.transactions.get(0).value = this.calcMinerReward();
 			this.mineableBlock.transactions.get(0).outputs.get(0).value = this.calcMinerReward();
 		}
+		System.out.println(nodeID + " got minable block(transactions in Block): " );
+		for(Transaction t : mineableBlock.transactions)
+			System.out.println(t);
 	}
 
 	public void sentToFull() {
-		StringUtil.getFullNode().recievedBlocks.add(minedBlock);
+		fullNode.recievedBlocks.add(minedBlock);
+		System.out.println(nodeID + " send Block " + minedBlock.hash + "to " + fullNode.nodeID);
 		minedBlock = null;
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Block mineBlock(int difficulty) {
@@ -87,7 +95,7 @@ public class Miner extends Node {
 			}
 			a = 0;
 		}
-		System.out.println("Block Mined!!! : " + mineableBlock.hash);
+		System.out.println(nodeID + "mined Block : " + mineableBlock.hash + "!!!!!!!!!!");
 
 		minedBlock = mineableBlock;
 		return minedBlock;
@@ -105,8 +113,8 @@ public class Miner extends Node {
 			}
 		}
 
-		useableTransactions.add(transaction);
-		System.out.println("Transaction Successfully added to Block");
+		mineableBlock.transactions.add(transaction);
+		System.out.println(nodeID + ": Transaction Successfully added to Block: " + transaction + "\n");
 		return true;
 	}
 

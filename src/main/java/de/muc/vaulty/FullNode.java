@@ -10,6 +10,8 @@ public class FullNode extends Node implements Serializable {
 	public HashMap<String, TransactionOutput> UTXOset = new HashMap<String, TransactionOutput>();
 	public ArrayList<Transaction> memPool = new ArrayList<Transaction>();
 	public ArrayList<Block> blockchain = new ArrayList<Block>();
+	private int transit = 0;
+	private int blockit = 0;
 
 	public FullNode(String id) {
 		super(id);
@@ -20,15 +22,18 @@ public class FullNode extends Node implements Serializable {
 	public ArrayList<Transaction> recievedTransactions = new ArrayList<Transaction>();
 
 	private void processReceivedBlocks() {
-		Block rb = recievedBlocks.get(0);
+		Block rb = recievedBlocks.get(blockit);
+		System.out.println(nodeID + " got a Block: " + rb.hash + " and started processing it.");
 		if (isBlockValid(rb)) {
 			blockchain.add(rb);
+			System.out.println(nodeID + " added block: " + rb.hash);
 			for (int i = 0; i < VaultyChain.Network.size(); i++) {
 				if (VaultyChain.Network.get(i).NodeClass.equals("Miner")) {
 					Miner m = (Miner) (VaultyChain.Network.get(i));
 					m.newBlockValidatedByNote = true;
 				}
 			}
+			System.out.println(nodeID + " miner noticed new Block");
 			ArrayList<FullNode> fullnodes = getOtherFullNodes();
 			for (FullNode fn : fullnodes) {
 				fn.recievedBlocks.add(rb);
@@ -36,24 +41,34 @@ public class FullNode extends Node implements Serializable {
 			updateUTXOs();
 			updateMemPool();
 		}
-		recievedBlocks.remove(0);
+		else {
+			System.out.println(nodeID + " thoght block is not valid");
+		}
+		blockit++;
+//		recievedBlocks.remove(0);
+//		System.out.println(nodeID + " block removed last block in blockchain is " + blockchain.get(blockchain.size()-1).hash);
 	}
 
 	private void processRecievedTransactions() {
-		for (Transaction t : recievedTransactions) {
-			if (StringUtil.validateTransaction(t, this)) {
+		while (transit<recievedTransactions.size()-1) {
+			System.out.println(nodeID + " got a Transaction: " + recievedTransactions.get(transit).transactionId + " and started processing it.");
+			if (StringUtil.validateTransaction(recievedTransactions.get(transit), this)) {
 				for (FullNode n : getOtherFullNodes()) {
-					n.recievedTransactions.add(t);
+					n.recievedTransactions.add(recievedTransactions.get(transit));
 				}
-				if (!memPool.contains(t)) {
-					for (TransactionOutput tout : t.inputs) {
+				System.out.println(nodeID + " added transaction in other FullNode ");
+				if (!memPool.contains(recievedTransactions.get(transit))) {
+					for (TransactionOutput tout : recievedTransactions.get(transit).inputs) {
 						tout.locked = true;
-						memPool.add(t);
+						memPool.add(recievedTransactions.get(transit));
 					}
 				}
+				System.out.println(nodeID + " mempool updated ");
 			}
+			transit++;
 		}
-		recievedTransactions.clear();
+//		recievedTransactions.clear();
+//		System.out.println(nodeID + " recieved transaction cleared");
 	}
 
 	private void updateUTXOs() {
@@ -158,16 +173,22 @@ public class FullNode extends Node implements Serializable {
 	}
 
 	private boolean isBlockValid(Block block) {
-		if (block.merkleRoot != StringUtil.getMerkleRoot(block.transactions))
-			return false;
+//		if (block.merkleRoot != StringUtil.getMerkleRoot(block.transactions)) {
+//			System.out.println(nodeID + " merkelroot not valid");
+//			return false;
+//		}
+			
 		if(blockchain.size()>0) {
-			if (block.previousHash != blockchain.get(blockchain.size() - 1).hash)
+			if (block.previousHash != blockchain.get(blockchain.size() - 1).hash) {
+				System.out.println(nodeID + " previosHash not valid");
 				return false;
+			}	
 		}
 		String target = StringUtil.getDificultyString(VaultyChain.difficulty); // Create a string with difficulty * "0"
 		if (StringUtil.calculateHash(block).substring(0, VaultyChain.difficulty).equals(target)) {
 			return true;
 		} else {
+			System.out.println(nodeID + " popably 000000 not right.");
 			return false;
 		}
 	}
@@ -188,9 +209,9 @@ public class FullNode extends Node implements Serializable {
 	@Override
 	public void run() {
 		while(true) {
-			if (recievedTransactions.size() != 0)
+			if (recievedTransactions.size() > transit)
 				processRecievedTransactions();
-			if (recievedBlocks.size() != 0)
+			if (recievedBlocks.size() > blockit)
 				processReceivedBlocks();
 			try {
 				Thread.sleep(10);
