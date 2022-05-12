@@ -261,10 +261,11 @@ public class Control {
 				break;
 			}
 		}
-		if(thisWallet != null && thisWallet != null) {
+		if(thisWallet != null && thatWallet != null) {
 			thisWallet.sendFunds(thatWallet.publicKey,Float.parseFloat(View.amountA.getText()),Float.parseFloat(View.feeA.getText()));
 		}
-		
+		System.out.println("++++++++++++++++  This Walleet:" + thisWallet.username);
+		System.out.println("++++++++++++++++  That Walleet:" + thatWallet.username);
 		// If valid Transaction
 		JOptionPane.showMessageDialog(jd, "Transaction successfully added to mempool", "SEND FUNDS",
 				JOptionPane.PLAIN_MESSAGE);

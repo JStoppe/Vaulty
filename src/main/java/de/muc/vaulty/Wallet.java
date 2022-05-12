@@ -74,6 +74,7 @@ public class Wallet {
 		}
 
 		Transaction newTransaction = new Transaction(publicKey, _recipient, value, fee, inputs, this);
+		System.out.println("Hier steht die Transaction ID von SendFunds: " + newTransaction.transactionId);
 		StringUtil.generateSignature(privateKey, newTransaction);
 		StringUtil.validateTransaction(newTransaction, FullNode);
 

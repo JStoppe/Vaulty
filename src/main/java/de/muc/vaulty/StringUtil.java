@@ -127,10 +127,10 @@ public class StringUtil {
 	}
 
 	public static boolean validateTransaction(Transaction t, FullNode fn) {
-		if(StringUtil.verifySignature(t) == false) {
-			System.out.println("#Transaction Signature failed to verify");
-			return false;
-		}
+//		if(StringUtil.verifySignature(t) == false) {
+//			System.out.println("#Transaction Signature failed to verify");
+//			return false;
+//		}
 		for(TransactionOutput i : t.inputs) {
 			if(!fn.UTXOset.containsValue(i)) {
 				System.out.println("TransactionInput not found in UTXOset!" + i);
