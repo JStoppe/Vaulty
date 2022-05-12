@@ -23,15 +23,14 @@ public class VaultyChain {
 //		//add our blocks to the blockchain ArrayList:
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		
-//		new MainFrame();
 		
 		FullNode node01 = new FullNode("node01");
 		FullNode node02 = new FullNode("node02");
 		
 		coinbase = new Wallet("coinbase");
-		Wallet walletA = new Wallet("Wallet A");
-		Wallet walletB = new Wallet("Wallet B");
-		
+		Wallet walletA = new Wallet("walletA");
+		Wallet walletB = new Wallet("walletB");
+
 		Miner miner01 = new Miner("miner01","Miner 01");
 		Miner miner02 = new Miner("miner02","Miner 02");
 		
@@ -39,6 +38,8 @@ public class VaultyChain {
 		node02.start();
 		miner01.start();
 		miner02.start();
+		String walletName = wallets.get(StringUtil.getStringFromKey(Transaction.sender)).username;
+		System.out.println(walletName);
 		
 		java.awt.EventQueue.invokeLater(new Runnable() {
 		       public void run() {
