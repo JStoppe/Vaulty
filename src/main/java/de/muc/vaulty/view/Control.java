@@ -231,14 +231,28 @@ public class Control {
 //   }
    
    public void selectRecipient(ActionEvent ae) {
-	   
-	   //Liste erstellter Wallets (usernames)
+	   String[] names = getWallets();
+	   String input = (String) JOptionPane.showInputDialog(null, "Select Wallet",
+	        "CHANGE WALLET", JOptionPane.QUESTION_MESSAGE, null, names, names[1]);
+
+//	   View.walletNameA.setText(input);
+	   Wallet otherWallet = new Wallet("jokeWallet");
+	   for(Wallet w : VaultyChain.walletsNeu) {
+		   if(w.username == input) {
+			   otherWallet = w;
+			   break;
+		   }
+	   }
+//	   View.balanceA.setText(String.valueOf(myWallet.getBalance()));
+//	   String store =;
+//	   otherWallet = null;
 	   
 
 	    
    }
    
    public void transferVaulty(ActionEvent ae) {
+	   
 	   
 	   // If valid Transaction 
 	   JOptionPane.showMessageDialog(jd,
