@@ -34,6 +34,7 @@ public class Wallet {
 			privateKey = keyPair.getPrivate();
 			publicKey = keyPair.getPublic();
 			VaultyChain.wallets.put(StringUtil.getStringFromKey(this.publicKey), this);
+			VaultyChain.walletsNeu.add(this);
 			this.FullNode = StringUtil.getFullNode();
 
 		} catch (Exception e) {

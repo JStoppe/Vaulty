@@ -10,14 +10,14 @@ public class Miner extends Node{
 	Block minedBlock;
 	FullNode fullNode;
 	int minerCount=1;
-	Wallet minerWallet = new Wallet("Miner " + new Date().getTime());	
+	Wallet minerWallet;	
 	boolean newBlockValidatedByNote = false;
 	
 	
-	public Miner(String nodeID, Wallet walletID) {
+	public Miner(String nodeID, String walletName) {
 		super(nodeID);
 		super.NodeClass = "Miner";
-		
+		minerWallet = new Wallet(walletName);
 	}
 	
 	
