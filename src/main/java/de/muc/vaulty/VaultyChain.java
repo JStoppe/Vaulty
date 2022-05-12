@@ -28,8 +28,8 @@ public class VaultyChain {
 		FullNode node02 = new FullNode("node02");
 		
 		coinbase = new Wallet("coinbase");
-		Wallet walletA = new Wallet("walletA");
-		Wallet walletB = new Wallet("walletB");
+		Wallet walletA = new Wallet("Wallet A");
+		Wallet walletB = new Wallet("Wallet B");
 
 		Miner miner01 = new Miner("miner01","Miner 01");
 		Miner miner02 = new Miner("miner02","Miner 02");
@@ -38,7 +38,7 @@ public class VaultyChain {
 		node02.start();
 		miner01.start();
 		miner02.start();
-		
+
 		java.awt.EventQueue.invokeLater(new Runnable() {
 		       public void run() {
 		          de.muc.vaulty.view.MVC.createAndShowUI();
